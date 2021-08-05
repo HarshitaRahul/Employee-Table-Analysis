@@ -1,7 +1,7 @@
 -- DROP TABLE IF EXISTS departments;
 -- DROP TABLE IF EXISTS dept_emp;
 -- DROP TABLE IF EXISTS dept_manager;
--- DROP TABLE IF EXISTS employees;
+DROP TABLE IF EXISTS employees;
 -- DROP TABLE IF EXISTS salaries;
 -- DROP TABLE IF EXISTS titles;
 
@@ -33,11 +33,11 @@ SELECT * FROM "dept_manager";
 CREATE TABLE "employees" (
     "emp_no" int   NOT NULL,
     "emp_title_id" varchar(30)   NOT NULL,
-    "birth_date" int   NOT NULL,
+    "birth_date" DATE,
     "first_name" varchar(30)   NOT NULL,
     "last_name" varchar(30)   NOT NULL,
     "sex" varchar(30)   NOT NULL,
-    "hire_date" varchar(30)   NOT NULL,
+    "hire_date" DATE,
     CONSTRAINT "pk_employees" PRIMARY KEY (
         "emp_no"
      )
@@ -81,5 +81,14 @@ ALTER TABLE "salaries" ADD CONSTRAINT "fk_salaries_emp_no" FOREIGN KEY("emp_no")
 REFERENCES "employees" ("emp_no");
 
 -- 1. List the following details of each employee: employee number, last name, first name, sex, and salary.
-SELECT employee.emp_no, employee
+SELECT employees.emp_no, employees.first_name, employees.last_name, employees.sex, salaries.salary
+FROM employees
+LEFT JOIN salaries
+ON employees.emp_no = salaries.emp_no;
 
+-- 2. List first name, last name, and hire date for employees who were hired in 1986.
+SELECT first_name, last_name, hire_date
+FROM employees
+WHERE DATE_PART('year',hire_date) = 1986;
+
+--3. List the manager of each department with the following information: department number, department name, the manager's employee number, last name, first name.
